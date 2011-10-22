@@ -11,7 +11,12 @@ sub set {}
 
 In a L<Dancer> application:
 
-	set plugins          => { 'Cache::CHI' => { driver => 'Memory', global => 1 } };
+	set plugins          => {
+		'Cache::CHI' => {
+			driver => 'Memory',
+			global => 1
+		}
+	};
 	set session          => 'CHI';
 	set session_expires  => '1 hour';
 	set chi_session_opts => { use_plugin => 1 };
