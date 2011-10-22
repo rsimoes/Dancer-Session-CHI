@@ -72,5 +72,5 @@ Richard Simões <rsimoes at cpan dot org>
 Copyright © 2011 Richard Simões.
 
 This module is released under the terms of the
-<Artistic License 2.0|http://www.perlfoundation.org/artistic_license_2_0>
+L<Artistic License 2.0|http://www.perlfoundation.org/artistic_license_2_0>
 and may be modified and/or redistributed under the same or any compatible license.
