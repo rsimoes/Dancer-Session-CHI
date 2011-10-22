@@ -35,10 +35,9 @@ In a F<config.yml>:
 
 =head1 DESCRIPTION
 
-This module leverages the great L<CHI> via L<Dancer::Plugin::Cache::CHI> to provide session management for
-L<Dancer> applications. Just as L<Dancer::Session::KiokuDB> opens up L<KiokuDB>'s full range of KiokuDB::Backend*
-modules to be used in Dancer session management, C<Dancer::Session::CHI> makes available the complete CHI::Driver::*
-collection.
+This module leverages the great L<CHI> to provide session management for L<Dancer> applications. Just as
+L<Dancer::Session::KiokuDB> opens up L<KiokuDB>'s full range of KiokuDB::Backend* modules to be used in
+Dancer session management, C<Dancer::Session::CHI> makes available the complete CHI::Driver::* collection.
 
 =head1 CONFIGURATION
 
