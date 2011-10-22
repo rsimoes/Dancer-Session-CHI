@@ -5,16 +5,18 @@
 Dancer::Session::CHI - CHI-based session engine for Dancer
 
 =head1 SYNOPSIS
+
 =for test_synopsis
 sub set {}
-
 In a Dancer app:
+
 	set plugins          => { 'Cache::CHI' => { driver => 'Memory', global => 1 } };
 	set session          => 'CHI';
 	set session_expires  => '1 hour';
 	set chi_session_opts => { use_plugin => 1 };
 
 In a C<config.yml>:
+
 	plugins:
 		Cache::CHI:
 			driver: Memory
