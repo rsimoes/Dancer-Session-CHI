@@ -42,9 +42,9 @@ collection.
 
 =head1 CONFIGURATION
 
-C<Dancer::Session::CHI> accepts a C<use_plugin> option that defaults to C<0>. If set to C<1>,
-L<Dancer::Plugin::Cache::CHI> will be used directly for session management, with no changes made to the
-plugin's configuration.
+Under its C<chi_session_opts> key, C<Dancer::Session::CHI> accepts a C<use_plugin> option that defaults to
+C<0>. If set to C<1>, L<Dancer::Plugin::Cache::CHI> will be used directly for session management, with no
+changes made to the plugin's configuration.
 
 If C<use_plugin> is left false, all other options are passed through to construct a new L<CHI> object, even if
 L<Dancer::Plugin::Cache::CHI> is also in use. This new object needn't use the same driver as the plugin.
