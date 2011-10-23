@@ -4,13 +4,13 @@ use v5.10;
 use strict;
 use warnings;
 use utf8::all;
-use namespace::autoclean;
-use CHI;
+use namespace::autoclean 0.13;
+use CHI 0.49;
 use Dancer::Config ();
 use Dancer::Logger ();
 use English '-no_match_vars';
-use Moose;
-use MooseX::NonMoose;
+use Moose 2.0205;
+use MooseX::NonMoose 0.22;
 use Scalar::Util 'blessed';
 
 extends 'Dancer::Session::Abstract';
