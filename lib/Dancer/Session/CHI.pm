@@ -16,7 +16,7 @@ use Scalar::Util 'blessed';
 extends 'Dancer::Session::Abstract';
 
 # VERSION
-# ABSTRACT: CHI-based session backend for Dancer
+# ABSTRACT: CHI-based session engine for Dancer
 
 my $CHI; # private "class attribute"
 
