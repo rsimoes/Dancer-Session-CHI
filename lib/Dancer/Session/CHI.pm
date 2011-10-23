@@ -20,14 +20,16 @@ extends 'Dancer::Session::Abstract';
 
 my $CHI; # private "class attribute"
 
+sub _config;
+
 # Pre-construction:
 before [qw/create retrieve/] => sub {
 	my ($class) = @ARG;
 	return if blessed $CHI;
-	my $options = config()->{session_CHI};
+	my $options = _config->{session_CHI};
 	confess 'CHI session options not found' if not ref $options;
 	my $use_plugin = $options->{use_plugin} ? 1 : 0;
-	my $is_loaded = exists config()->{plugins}{'Cache::CHI'};
+	my $is_loaded = exists _config->{plugins}{'Cache::CHI'};
 	confess "CHI plugin requested but not loaded" if $use_plugin and not $is_loaded;
 	$CHI = do {
 		given ($use_plugin) {
@@ -67,7 +69,7 @@ sub flush {
 	my ($self) = @ARG;
 	my $session_key = 'dancer_session_' . $self->id;
 	$CHI->set( $session_key => $self );
-	debug("Session data written to $session_key.");
+	_debug("Session data written to $session_key.");
 	return;
 }
 
@@ -75,23 +77,23 @@ sub destroy {
 	my ($self) = @ARG;
 	my $session_key = 'dancer_session_' . $self->id;
 	$CHI->remove($session_key);
-	debug("Session $session_key destroyed.");
+	_debug("Session $session_key destroyed.");
 	return;
 }
 
 # Utility functions:
 
-sub debug {
+sub _debug {
 	my ($msg) = @ARG;
 	return Dancer::Logger::debug($msg);
 }
 
-sub config {
+sub _config {
 	my ($key) = @ARG;
 	return Dancer::Config::settings($key);
 }
 
-#no Moose;
-#__PACKAGE__->meta->make_immutable;
+no Moose;
+__PACKAGE__->meta->make_immutable;
 
 1;

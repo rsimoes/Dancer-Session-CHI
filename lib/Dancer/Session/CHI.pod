@@ -6,10 +6,11 @@ Dancer::Session::CHI - CHI-based session engine for Dancer
 
 =head1 SYNOPSIS
 
-=for test_synopsis
-sub set {}
-
 In a L<Dancer> application:
+
+	set session          => 'CHI';
+	set session_expires  => '1 hour';
+	set session_CHI      => { use_plugin => 1 };
 
 	set plugins          => {
 		'Cache::CHI' => {
@@ -17,21 +18,18 @@ In a L<Dancer> application:
 			global => 1
 		}
 	};
-	set session          => 'CHI';
-	set session_expires  => '1 hour';
-	set session_CHI => { use_plugin => 1 };
 
 In a F<config.yml>:
-
-	plugins:
-		Cache::CHI:
-			driver: Memory
-			global: 1
 
 	session: CHI
 	session_expires: 1 hour
 	session_CHI:
 		use_plugin: 1
+
+	plugins:
+		Cache::CHI:
+			driver: Memory
+			global: 1
 
 =head1 DESCRIPTION
 
@@ -46,27 +44,57 @@ C<0>. If set to C<1>, L<Dancer::Plugin::Cache::CHI> will be used directly for se
 changes made to the plugin's configuration.
 
 If C<use_plugin> is left false, all other options are passed through to construct a new L<CHI> object, even if
-L<Dancer::Plugin::Cache::CHI> is also in use. This new object needn't use the same driver as the plugin.
+L<Dancer::Plugin::Cache::CHI> is also in use. This new object needn't use the same L<CHI::Driver> as the plugin.
 
-=head1 CLASS METHODS
+=head1 METHODS
 
-=head2 create()
+=head2 CLASS
+
+=over
+
+=item C<create()>
 
 Creates a new session object and returns it.
 
-=head2 retrieve($id)
+=item C<retrieve($id)>
 
 Returns the session object containing an ID of $id.
 
-=head1 OBJECT METHODS
+=back
 
-=head2 flush()
+=head2 OBJECT
+
+=over
+
+=item C<flush()>
 
 Writes all session data to the CHI storage backend.
 
-=head2 destroy()
+=item C<destroy()>
 
 Ends a Dancer session and wipes all session data from the CHI storage backend.
+
+=back
+
+=head1 CAVEATS
+
+=over
+
+=item *
+
+Some L<CHI::Driver> parameters are sufficiently complex to not be placeable in a F<config.yml>. Session and/or
+plugin configuration may thus be needed to be done in application code instead.
+
+=item *
+
+When using L<CHI::Driver::DBI>, thread/fork safety can be ensured by passing it a L<DBIx::Connector> object.
+
+=back
+
+=head1 BUGS
+
+This is an initial I<TRIAL> release, so bugs may be lurking. Please report any issues to this module's
+L<GitHub issues page|https://github.com/rsimoes/Dancer-Session-CHI/issues>.
 
 =head1 AUTHOR
 
