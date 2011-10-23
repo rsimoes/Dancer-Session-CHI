@@ -57,7 +57,7 @@ sub create {
 
 sub retrieve {
 	my ($class, $session_id) = @ARG;
-	my $session = $CHI->get( 'session_' . $session_id );
+	my $session = $CHI->get( 'dancer_session_' . $session_id );
 	return $session;
 }
 
@@ -65,19 +65,17 @@ sub retrieve {
 
 sub flush {
 	my ($self) = @ARG;
-	my $session_id = $self->id;
-	my $key = "session_$session_id";
-	$CHI->set( $key => $self );
-	debug("Session data written to $key.");
+	my $session_key = 'dancer_session_' . $self->id;
+	$CHI->set( $session_key => $self );
+	debug("Session data written to $session_key.");
 	return;
 }
 
 sub destroy {
 	my ($self) = @ARG;
-	my $session_id = $self->id;
-	my $key = "session_$session_id";
-	$CHI->remove($key);
-	debug("Session $session_id destroyed.");
+	my $session_key = 'dancer_session_' . $self->id;
+	$CHI->remove($session_key);
+	debug("Session $session_key destroyed.");
 	return;
 }
 
