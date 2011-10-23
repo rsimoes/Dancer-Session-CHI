@@ -70,7 +70,7 @@ Ends a Dancer session and wipes all session data from the CHI storage backend.
 
 =head1 AUTHOR
 
-Richard Simões <rsimoes at cpan dot org>
+Richard Simões <rsimoes at CPAN dot org>
 
 =head1 COPYRIGHT AND LICENSE
 
