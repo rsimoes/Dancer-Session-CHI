@@ -6,6 +6,8 @@ use Test::Most tests => 10;
 use Dancer::Test;
 use Dancer::Session::CHI;
 
+
+
 my $class       = 'Dancer::Session::CHI';
 my %CHI_options = ( driver => 'Memory', datastore => \ my %hash );
 throws_ok(
@@ -14,7 +16,7 @@ throws_ok(
 	'CHI session without any options throws expection'
 );
 
-Dancer::set( chi_session_opts => { use_plugin => 1 } );
+Dancer::set( session_CHI => { use_plugin => 1 } );
 
 throws_ok(
 	sub { $class->create },
@@ -26,6 +28,7 @@ throws_ok(
 Dancer::set( plugins => { 'Cache::CHI' => \%CHI_options } );
 my $with = 'with plugin';
 for ( 1..2 ) {
+	Dancer::ModuleLoader->load(Dancer::Engine->build( session => 'CHI', Dancer::config ));
 	my $session;
 	lives_ok(
 		sub { $session = $class->create },
@@ -37,5 +40,5 @@ for ( 1..2 ) {
 	ok $sess_id, "&create $with yields valid session ID ($sess_id)";
 
 	$with = 'without plugin';
-	Dancer::set( chi_session_opts => \%CHI_options );
+	Dancer::set( session_CHI => \%CHI_options );
 }

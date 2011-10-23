@@ -19,7 +19,7 @@ In a L<Dancer> application:
 	};
 	set session          => 'CHI';
 	set session_expires  => '1 hour';
-	set chi_session_opts => { use_plugin => 1 };
+	set session_CHI => { use_plugin => 1 };
 
 In a F<config.yml>:
 
@@ -30,7 +30,7 @@ In a F<config.yml>:
 
 	session: CHI
 	session_expires: 1 hour
-	chi_session_opts:
+	session_CHI:
 		use_plugin: 1
 
 =head1 DESCRIPTION
@@ -41,7 +41,7 @@ Dancer session management, L<Dancer::Session::CHI> makes available the complete 
 
 =head1 CONFIGURATION
 
-Under its C<chi_session_opts> key, Dancer::Session::CHI accepts a C<use_plugin> option that defaults to
+Under its C<session_CHI> key, Dancer::Session::CHI accepts a C<use_plugin> option that defaults to
 C<0>. If set to C<1>, L<Dancer::Plugin::Cache::CHI> will be used directly for session management, with no
 changes made to the plugin's configuration.
 

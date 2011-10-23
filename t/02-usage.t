@@ -9,7 +9,7 @@ use Dancer::Session::CHI;
 
 my $plugins = { 'Cache::CHI' => { driver => 'Memory', global => 1 } };
 Dancer::set( plugins => $plugins );
-Dancer::set( chi_session_opts => { use_plugin => 1 } );
+Dancer::set( session_CHI => { use_plugin => 1 } );
 my $sess_id = session 'id';
 
 lives_ok { Dancer::Session::CHI->retrieve($sess_id) } 'session retrieval lives okay';

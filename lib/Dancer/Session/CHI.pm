@@ -6,9 +6,9 @@ use warnings;
 use utf8::all;
 use namespace::autoclean;
 use CHI;
-use Dancer qw/config debug/;
+use Dancer::Config ();
+use Dancer::Logger ();
 use English '-no_match_vars';
-use Method::Signatures;
 use Moose;
 use MooseX::NonMoose;
 use Scalar::Util 'blessed';
@@ -21,12 +21,13 @@ extends 'Dancer::Session::Abstract';
 my $CHI; # private "class attribute"
 
 # Pre-construction:
-before [qw/create retrieve/] => method ($class: @ARG) {
+before [qw/create retrieve/] => sub {
+	my ($class) = @ARG;
 	return if blessed $CHI;
-	my $options = config->{chi_session_opts}
-		or confess 'CHI session options not found';
+	my $options = config()->{session_CHI};
+	confess 'CHI session options not found' if not ref $options;
 	my $use_plugin = $options->{use_plugin} ? 1 : 0;
-	my $is_loaded = exists config->{plugins}{'Cache::CHI'};
+	my $is_loaded = exists config()->{plugins}{'Cache::CHI'};
 	confess "CHI plugin requested but not loaded" if $use_plugin and not $is_loaded;
 	$CHI = do {
 		given ($use_plugin) {
@@ -36,44 +37,63 @@ before [qw/create retrieve/] => method ($class: @ARG) {
 				cache();
 			}
 			default {
-				delete $options->{use_plugin};
-				CHI->new(%$options);
+				my %options = %$options;
+				delete $options{use_plugin};
+				CHI->new(\%options);
 			}
-		};
+		}
 	};
 };
 
 # Class methods:
 
-method create ($class:) { ## no critic (Modules::RequireEndWithOne)
+sub create {
+	my ($class) = @ARG;
 	# Indirectly create new session by flushing:
 	my $self = $class->new;
 	$self->flush;
 	return $self;
 }
 
-method retrieve ($class: Int $session_id) {
+sub retrieve {
+	my ($class, $session_id) = @ARG;
 	my $session = $CHI->get( 'session_' . $session_id );
 	return $session;
 }
 
 # Object methods:
 
-method flush ($self:) {
+sub flush {
+	my ($self) = @ARG;
 	my $session_id = $self->id;
 	my $key = "session_$session_id";
 	$CHI->set( $key => $self );
 	debug("Session data written to $key.");
+	return;
 }
 
-method destroy ($self:) {
+sub destroy {
+	my ($self) = @ARG;
 	my $session_id = $self->id;
 	my $key = "session_$session_id";
 	$CHI->remove($key);
 	debug("Session $session_id destroyed.");
+	return;
 }
 
-no Moose;
-__PACKAGE__->meta->make_immutable;
+# Utility functions:
+
+sub debug {
+	my ($msg) = @ARG;
+	return Dancer::Logger::debug($msg);
+}
+
+sub config {
+	my ($key) = @ARG;
+	return Dancer::Config::settings($key);
+}
+
+#no Moose;
+#__PACKAGE__->meta->make_immutable;
 
 1;
