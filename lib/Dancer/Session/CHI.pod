@@ -83,7 +83,7 @@ Ends a Dancer session and wipes all session data from the CHI storage backend.
 =item *
 
 Some L<CHI::Driver> parameters are sufficiently complex to not be placeable in a F<config.yml>. Session and/or
-plugin configuration may thus be needed to be done in application code instead.
+plugin configuration may instead be needed to be done in application code.
 
 =item *
 
