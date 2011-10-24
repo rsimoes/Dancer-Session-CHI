@@ -30,31 +30,9 @@ class_has _cache => (
 my $class = __PACKAGE__;
 sub _config;
 
-# Pre-construction:
-sub _build__cache {
-	my ($class) = @ARG;
-#	say 'hello1';
-	my $options = _config->{session_CHI};
-	confess 'CHI session options not found' if not ref $options;
-	my $use_plugin = $options->{use_plugin} ? 1 : 0;
-	my $is_loaded = exists _config->{plugins}{'Cache::CHI'};
-#	say 'hello2' . " $is_loaded";
-	confess "CHI plugin requested but not loaded" if $use_plugin and not $is_loaded;
-	if ($use_plugin) {
-		require Dancer::Plugin::Cache::CHI;
-		Dancer::Plugin::Cache::CHI->import;
-		cache();
-	} else {
-		my %options = %$options;
-		delete $options{use_plugin};
-		CHI->new(\%options);
-	}
-}
-
 # Class methods:
 
 sub create {
-	my ($class) = @ARG;
 	# Indirectly create new session by flushing:
 	my $self = $class->new;
 	$self->flush;
@@ -95,6 +73,26 @@ sub _debug {
 sub _config {
 	my ($key) = @ARG;
 	return Dancer::Config::settings($key);
+}
+
+# Attribute builders:
+
+sub _build__cache {
+	my $options = _config->{session_CHI};
+	confess 'CHI session options not found' if not ref $options;
+	my $use_plugin = $options->{use_plugin} ? 1 : 0;
+	my $is_loaded = exists _config->{plugins}{'Cache::CHI'};
+
+	confess "CHI plugin requested but not loaded" if $use_plugin and not $is_loaded;
+	if ($use_plugin) {
+		require Dancer::Plugin::Cache::CHI;
+		Dancer::Plugin::Cache::CHI->import;
+		return cache();
+	} else {
+		my %options = %$options;
+		delete $options{use_plugin};
+		return CHI->new(\%options);
+	}
 }
 
 no Moose;

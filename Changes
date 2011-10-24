@@ -1,7 +1,8 @@
 Revision history for Dancer-Session-CHI
 
 {{$NEXT}}
-	- Fixed Changes file.
+	- Avoided smart-match bug in Perl <= v5.12 by not using "given".
+	- Set version requirements for most dependencies
 
 v0.0.1    2011-10-23 03:43:17 America/Chicago
 	- First version, released on an unsuspecting world.
