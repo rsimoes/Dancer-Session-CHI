@@ -2,7 +2,8 @@
 
 use strict;
 use warnings;
-use Test::Most tests => 5;
+use Carp::Always;
+use Test::Most 0.22 tests => 5;
 use Dancer::Test;
 use Dancer 'session';
 use Dancer::Session::CHI;
