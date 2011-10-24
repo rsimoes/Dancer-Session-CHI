@@ -6,8 +6,7 @@ use warnings;
 use utf8::all;
 use namespace::autoclean 0.13;
 use CHI 0.49;
-use Dancer::Config ();
-use Dancer::Logger ();
+use Dancer 1.3072 qw/config debug/;
 use English '-no_match_vars';
 use Moose 2.0205;
 use MooseX::ClassAttribute 0.26;
@@ -28,14 +27,16 @@ class_has _cache => (
 );
 
 my $class = __PACKAGE__;
-sub _config;
 
 # Class methods:
 
 sub create {
 	# Indirectly create new session by flushing:
+	my ($class) = @ARG;
 	my $self = $class->new;
 	$self->flush;
+	my $session_id = $self->id;
+	debug("Session (id: $session_id) created.");
 	return $self;
 };
 
@@ -51,7 +52,6 @@ sub flush {
 	my ($self) = @ARG;
 	my $session_key = 'dancer_session_' . $self->id;
 	$class->_cache->set( $session_key => $self );
-	_debug("Session data written to $session_key.");
 	return;
 }
 
@@ -59,29 +59,17 @@ sub destroy {
 	my ($self) = @ARG;
 	my $session_key = 'dancer_session_' . $self->id;
 	$class->_cache->remove($session_key);
-	_debug("Session $session_key destroyed.");
+	debug("Session $session_key destroyed.");
 	return;
-}
-
-# Utility functions:
-
-sub _debug {
-	my ($msg) = @ARG;
-	return Dancer::Logger::debug($msg);
-}
-
-sub _config {
-	my ($key) = @ARG;
-	return Dancer::Config::settings($key);
 }
 
 # Attribute builders:
 
 sub _build__cache {
-	my $options = _config->{session_CHI};
+	my $options = config->{session_CHI};
 	confess 'CHI session options not found' if not ref $options;
 	my $use_plugin = $options->{use_plugin} ? 1 : 0;
-	my $is_loaded = exists _config->{plugins}{'Cache::CHI'};
+	my $is_loaded = exists config->{plugins}{'Cache::CHI'};
 
 	confess "CHI plugin requested but not loaded" if $use_plugin and not $is_loaded;
 	if ($use_plugin) {

@@ -1,6 +1,7 @@
 Revision history for Dancer-Session-CHI
 
 {{$NEXT}}
+	- Removed calls to Dancer v1 deep guts in anticipation of changes in Dancer v2.
 
 v0.0.2    2011-10-24 01:23:18 America/Chicago
 	- Avoided smart-match bug in Perl <= v5.12 by not using "given".
