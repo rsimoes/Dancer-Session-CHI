@@ -1,6 +1,8 @@
 Revision history for Dancer-Session-CHI
 
 {{$NEXT}}
+
+v0.0.3    2011-10-24 05:03:13 America/Chicago
 	- Removed calls to Dancer v1 deep guts in anticipation of changes in Dancer v2.
 
 v0.0.2    2011-10-24 01:23:18 America/Chicago
