@@ -35,9 +35,9 @@ for ( 1..2 ) {
 		"CHI session $with plugin created"
 	);
 	can_ok $session, qw/init create retrieve flush destroy id/;
-	isa_ok $session, $class, "&create $with yields session engine that";
+	isa_ok $session, $class, "&create $with plugin yields session engine that";
 	my $sess_id = $session->id;
-	ok $sess_id, "&create $with yields valid session ID ($sess_id)";
+	ok $sess_id, "&create $with plugin yields valid session ID ($sess_id)";
 
 	$with = 'without';
 	Dancer::set( session_CHI => \%CHI_options );
