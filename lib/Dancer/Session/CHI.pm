@@ -1,9 +1,8 @@
 package Dancer::Session::CHI;
 
 use v5.10;
-use strict;
-use warnings;
-use utf8::all;
+use strictures 1;
+use utf8::all 0.002;
 use namespace::autoclean 0.13;
 use CHI 0.49;
 use Dancer 1.3072 qw/config debug/;
@@ -11,8 +10,6 @@ use English '-no_match_vars';
 use Moose 2.0205;
 use MooseX::ClassAttribute 0.26;
 use MooseX::NonMoose 0.22;
-use MooseX::InsideOut 0.106;
-use MooseX::Types::Moose 0.30 'HashRef';
 use Scalar::Util 'blessed';
 
 extends 'Dancer::Session::Abstract';
