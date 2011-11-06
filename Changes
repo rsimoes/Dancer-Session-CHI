@@ -1,6 +1,9 @@
 Revision history for Dancer-Session-CHI
 
 {{$NEXT}}
+	- Build with Module::Build
+
+v0.0.4    2011-11-06 12:15:20 CST6CDT
 	- Removed a couple MooseX:: dependencies and Perl v5.10-related pragmas
 
 v0.0.3    2011-10-24 05:03:13 America/Chicago
