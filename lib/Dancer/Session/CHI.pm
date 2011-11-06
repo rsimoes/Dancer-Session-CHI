@@ -1,6 +1,5 @@
 package Dancer::Session::CHI;
 
-use v5.10;
 use strictures 1;
 use utf8::all 0.002;
 use namespace::autoclean 0.13;
