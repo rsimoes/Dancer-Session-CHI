@@ -1,7 +1,7 @@
 package Dancer::Session::CHI;
 
 use strictures 1;
-use utf8::all 0.002;
+use utf8;
 use namespace::autoclean 0.13;
 use CHI 0.49;
 use Dancer 1.3072 qw/config debug/;
