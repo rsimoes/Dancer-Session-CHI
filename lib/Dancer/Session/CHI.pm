@@ -38,7 +38,7 @@ sub retrieve {
 # Object methods:
 
 sub BUILD {
-	my $self = shift;
+	my ($self) = @ARG;
 	$self->flush;
 	my $session_id = $self->id;
 	debug("Session (id: $session_id) created.");
@@ -74,7 +74,6 @@ sub _build__cache {
 		Dancer::Plugin::Cache::CHI->import;
 		return cache();
 	} else {
-		delete $options->{use_plugin};
 		return CHI->new( %{$options} );
 	}
 }
