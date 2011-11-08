@@ -1,12 +1,11 @@
 #!/usr/bin/env perl
 
-use strict;
-use warnings;
-use Carp::Always;
-use Test::Most 0.22 tests => 5;
+use strictures 1;
+use Test::Most tests => 5;
 use Dancer::Test;
 use Dancer 'session';
 use Dancer::Session::CHI;
+use Dancer::Plugin::Cache::CHI;
 
 my $plugins = { 'Cache::CHI' => { driver => 'Memory', global => 1 } };
 Dancer::set( plugins => $plugins );
