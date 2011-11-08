@@ -1,6 +1,9 @@
 Revision history for Dancer-Session-CHI
 
 {{$NEXT}}
+	- Remove unused Scalar::Util prereq
+	- Avoid Dancer's pernicious global actions by removing `use Dancer qw(...);`
+	- Refactor tests
 
 v0.1.0    2011-11-06 13:11:29 America/Chicago
 	- Change license to LGPL, v3

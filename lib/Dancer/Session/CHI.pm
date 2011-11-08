@@ -2,14 +2,14 @@ package Dancer::Session::CHI;
 
 use strictures 1;
 use utf8;
-use namespace::autoclean 0.13;
+use namespace::autoclean 0.13 -also => [qw( config debug )];
 use CHI 0.49;
-use Dancer 1.3072 qw/config debug/;
+use Dancer::Config ();
+use Dancer::Logger ();
 use English '-no_match_vars';
 use Moose 2.0205;
 use MooseX::ClassAttribute 0.26;
 use MooseX::NonMoose 0.22;
-use Scalar::Util 'blessed';
 
 extends 'Dancer::Session::Abstract';
 
@@ -23,18 +23,11 @@ class_has _cache => (
 );
 
 my $class = __PACKAGE__;
+sub config;
 
 # Class methods:
 
-sub create {
-	# Indirectly create new session by flushing:
-	my ($class) = @ARG;
-	my $self = $class->new;
-	$self->flush;
-	my $session_id = $self->id;
-	debug("Session (id: $session_id) created.");
-	return $self;
-};
+sub create { goto &new }
 
 sub retrieve {
 	my ($class, $session_id) = @ARG;
@@ -43,6 +36,14 @@ sub retrieve {
 }
 
 # Object methods:
+
+sub BUILD {
+	my $self = shift;
+	$self->flush;
+	my $session_id = $self->id;
+	debug("Session (id: $session_id) created.");
+	return $self;
+}
 
 sub flush {
 	my ($self) = @ARG;
@@ -64,7 +65,7 @@ sub destroy {
 sub _build__cache {
 	my $options = config->{session_CHI};
 	confess 'CHI session options not found' if not ref $options;
-	my $use_plugin = $options->{use_plugin} ? 1 : 0;
+	my $use_plugin = delete $options->{use_plugin};
 	my $is_loaded = exists config->{plugins}{'Cache::CHI'};
 
 	confess "CHI plugin requested but not loaded" if $use_plugin and not $is_loaded;
@@ -73,11 +74,17 @@ sub _build__cache {
 		Dancer::Plugin::Cache::CHI->import;
 		return cache();
 	} else {
-		my %options = %$options;
-		delete $options{use_plugin};
-		return CHI->new(\%options);
+		delete $options->{use_plugin};
+		return CHI->new( %{$options} );
 	}
 }
+
+sub debug {
+	my ($msg) = @ARG;
+	return Dancer::Logger::debug($msg);
+}
+
+sub config { return Dancer::Config::settings }
 
 no Moose;
 __PACKAGE__->meta->make_immutable;
