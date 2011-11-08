@@ -48,6 +48,8 @@ L<Dancer::Plugin::Cache::CHI> is also in use. This new object needn't use the sa
 
 =head1 METHODS
 
+=for Pod::Coverage BUILD
+
 =head2 CLASS
 
 =over
@@ -105,3 +107,4 @@ Richard Simões <rsimoes at CPAN dot org>
 Copyright © 2011 Richard Simões. This module is released under the terms of the
 L<Artistic License 2.0|http://www.perlfoundation.org/artistic_license_2_0>
 and may be modified and/or redistributed under the same or any compatible license.
+
