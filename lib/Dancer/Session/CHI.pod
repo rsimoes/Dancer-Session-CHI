@@ -8,12 +8,12 @@ Dancer::Session::CHI - CHI-based session engine for Dancer
 
 In a L<Dancer> application:
 
-	set session          => 'CHI';
-	set session_expires  => '1 hour';
+	set session          => "CHI";
+	set session_expires  => "1 hour";
 	set session_CHI      => { use_plugin => 1 };
 
 	set plugins          => {
-		'Cache::CHI' => {
+		"Cache::CHI" => {
 			driver => 'Memory',
 			global => 1
 		}
@@ -33,18 +33,22 @@ In a F<config.yml>:
 
 =head1 DESCRIPTION
 
-This module leverages the great L<CHI> to provide session management for L<Dancer> applications. Just as
-L<Dancer::Session::KiokuDB> opens up L<KiokuDB>'s full range of L<KiokuDB::Backend>::* modules to be used in
-Dancer session management, L<Dancer::Session::CHI> makes available the complete L<CHI::Driver>::* collection.
+This module leverages L<CHI> to provide session management for L<Dancer>
+applications. Just as L<Dancer::Session::KiokuDB> opens up L<KiokuDB>'s
+full range of C<KiokuDB::Backend>::* modules to be used in Dancer session
+management, L<Dancer::Session::CHI> makes available the complete
+C<CHI::Driver>::* collection.
 
 =head1 CONFIGURATION
 
-Under its C<session_CHI> key, Dancer::Session::CHI accepts a C<use_plugin> option that defaults to
-C<0>. If set to C<1>, L<Dancer::Plugin::Cache::CHI> will be used directly for session management, with no
-changes made to the plugin's configuration.
+Under its C<session_CHI> key, Dancer::Session::CHI accepts a C<use_plugin>
+option that defaults to C<0>. If set to C<1>, L<Dancer::Plugin::Cache::CHI>
+will be used directly for session management, with no changes made to the
+plugin's configuration.
 
-If C<use_plugin> is left false, all other options are passed through to construct a new L<CHI> object, even if
-L<Dancer::Plugin::Cache::CHI> is also in use. This new object needn't use the same L<CHI::Driver> as the plugin.
+If C<use_plugin> is left false, all other options are passed through to
+construct a new L<CHI> object, even if L<Dancer::Plugin::Cache::CHI> is also in
+use. This new object needn't use the same L<CHI::Driver> as the plugin.
 
 =head1 METHODS
 
@@ -75,6 +79,10 @@ Writes all session data to the CHI storage backend.
 =item C<destroy()>
 
 Ends a Dancer session and wipes all session data from the CHI storage backend.
+
+=item C<reset()>
+
+Clear all Dancer session data from the CHI backend.
 
 =back
 
