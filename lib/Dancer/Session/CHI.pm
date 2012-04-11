@@ -6,9 +6,10 @@ use utf8;
 use Carp;
 use CHI;
 use Dancer::Logger;
-use Dancer::ModuleLoader;
 use Dancer::Config "setting";
+use Dancer::ModuleLoader;
 use File::Spec::Functions qw(rel2abs);
+use Storable "dclone";
 
 use base "Dancer::Session::Abstract";
 
@@ -38,7 +39,8 @@ sub flush {
 	my ($self) = @_;
 	$chi ||= _build_chi();
 	my $session_key = "dancer_session_" . $self->id;
-	$chi->set( $session_key => $self );
+	# Unbless so CHI's serialization procedure doesn't microwave the session:
+	$chi->set( $session_key => dclone($self) );
 	return }
 
 sub destroy {
@@ -69,7 +71,10 @@ sub _build_chi {
 
 	return $use_plugin
 		? do {
-			require Dancer::Plugin::Cache::CHI;
+			my $plugin = "Dancer::Plugin::Cache::CHI";
+			my $error_msg = "$plugin is needed and is not installed";
+			Dancer::ModuleLoader->load($plugin)
+				  or raise( core_session => $error_msg );
 			Dancer::Plugin::Cache::CHI::cache() }
 		: CHI->new( %{$options} ) }
 

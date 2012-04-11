@@ -1,6 +1,8 @@
 Revision history for Dancer-Session-CHI
 
 {{$NEXT}}
+	- Unblessed session object before passing to CHI to prevent hilarity during
+	  serialization by Storable.
 
 v0.1.2    2012-04-11 09:26:18 America/Chicago
 	- Module fully reimplemented without Moose.
