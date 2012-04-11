@@ -1,6 +1,8 @@
 Revision history for Dancer-Session-CHI
 
 {{$NEXT}}
+
+v0.1.2    2012-04-11 09:26:18 America/Chicago
 	- Module fully reimplemented without Moose.
 	- Fixed issue where CHI, when using file-based cache systems, would place
 	  the session directory in $app_dir/public if given a relative path.
