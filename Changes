@@ -1,6 +1,10 @@
 Revision history for Dancer-Session-CHI
 
 {{$NEXT}}
+	- Reverted previous fix attempt, implemented actual fix by correcting
+	  session key mismatch.
+
+v0.1.3    2012-04-11 12:51:19 America/Chicago
 	- Unblessed session object before passing to CHI to prevent hilarity during
 	  serialization by Storable.
 

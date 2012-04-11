@@ -8,53 +8,51 @@ use CHI;
 use Dancer::Logger;
 use Dancer::Config "setting";
 use Dancer::ModuleLoader;
-use File::Spec::Functions qw(rel2abs);
-use Storable "dclone";
+use File::Spec::Functions "rel2abs";
+
 
 use base "Dancer::Session::Abstract";
 
 # VERSION
 # ABSTRACT: CHI-based session engine for Dancer
 
-# Class methods:
-
 my $chi;
+
+# Class methods:
 
 sub create {
 	my ($class) = @_;
 	my $self = $class->new;
 	$self->flush;
 	my $session_id = $self->id;
-	Dancer::Logger::debug("Session (id: $session_id) created.");
+	Dancer::Logger->debug("Session (id: $session_id) created.");
 	return $self }
 
 sub retrieve {
 	my (undef, $session_id) = @_;
 	$chi ||= _build_chi();
-	return $chi->get($session_id) }
+	return $chi->get("session_$session_id") }
 
 # Object methods:
 
 sub flush {
 	my ($self) = @_;
 	$chi ||= _build_chi();
-	my $session_key = "dancer_session_" . $self->id;
-	# Unbless so CHI's serialization procedure doesn't microwave the session:
-	$chi->set( $session_key => dclone($self) );
-	return }
+	my $session_id = $self->id;
+	$chi->set( "session_$session_id" => $self );
+	return $self; }
 
 sub destroy {
 	my ($self) = @_;
 	my $session_id = $self->id;
-	my $session_key = "dancer_session_session_id";
-	$chi->remove($session_key);
-	Dancer::Logger::debug("Session (id: $session_id) destroyed.");
+	$chi->remove("session_$session_id");
+	Dancer::Logger->debug("Session (id: $session_id) destroyed.");
 	return $self }
 
 sub reset :method {
-	my ($self) = @_;
+	my ($class) = @_;
 	$chi->clear;
-	return $self }
+	return $class }
 
 sub _build_chi {
 	my $options = setting("session_CHI");
