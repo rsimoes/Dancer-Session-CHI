@@ -3,9 +3,8 @@ package Dancer::Session::CHI;
 use strict;
 use warnings;
 use utf8;
-use Carp;
 use CHI;
-use Dancer qw(cookie);
+use Dancer ":syntax";
 use Dancer::Logger;
 use Dancer::Config qw(setting);
 use Dancer::ModuleLoader;
@@ -22,6 +21,7 @@ use base "Dancer::Session::Abstract";
 sub create {
     my ($class) = @_;
     my $self = $class->new;
+
     $self->flush;
     Dancer::Logger->debug("Session (id: " . $self->id . " created.");
     return $self;
@@ -44,11 +44,13 @@ sub flush {
 }
 
 sub purge {
-    my ($self) = @_;
+    my ($class) = @_;
     my $chi = _build_chi();
     $chi->purge;
-    return $self;
+    return;
 }
+
+sub reset :method { goto &purge }
 
 sub destroy {
     my ($self) = @_;
@@ -66,7 +68,9 @@ sub _build_chi {
     return $chi if blessed($chi) && $chi->isa("CHI");
 
     my $options = setting("session_CHI");
-    ( ref $options eq ref {} ) or croak "CHI session options not found";
+    if ( ref($options) ne "HASH" ) {
+        error "CHI session options not found";
+    }
 
     # Don't let CHI determine the absolute path:
     if ( exists $options->{root_dir} ) {
@@ -76,10 +80,10 @@ sub _build_chi {
     my $use_plugin = delete $options->{use_plugin};
     my $is_loaded = exists setting("plugins")->{"Cache::CHI"};
     if ( $use_plugin && !$is_loaded ) {
-        croak "CHI plugin requested but not loaded";
+        error "CHI plugin requested but not loaded";
     }
 
-    return $use_plugin
+    $chi = $use_plugin
         ? do {
             my $plugin = "Dancer::Plugin::Cache::CHI";
             my $error_msg = "$plugin is needed and is not installed";
@@ -88,7 +92,9 @@ sub _build_chi {
             }
             Dancer::Plugin::Cache::CHI::cache()
         }
-        : CHI->new( %{$options} );
+        : CHI->new( %{$options}
+    );
+    return $chi;
 }
 
 1;
