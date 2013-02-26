@@ -8,28 +8,28 @@ Dancer::Session::CHI - CHI-based session engine for Dancer
 
 In a L<Dancer> application:
 
-	set session          => "CHI";
-	set session_expires  => "1 hour";
-	set session_CHI      => { use_plugin => 1 };
+    set session          => "CHI";
+    set session_expires  => "1 hour";
+    set session_CHI      => { use_plugin => 1 };
 
-	set plugins          => {
-		"Cache::CHI" => {
-			driver => 'Memory',
-			global => 1
-		}
-	};
+    set plugins          => {
+        "Cache::CHI" => {
+            driver => 'Memory',
+            global => 1
+        }
+    };
 
 In a F<config.yml>:
 
-	session: CHI
-	session_expires: 1 hour
-	session_CHI:
-		use_plugin: 1
+    session: CHI
+    session_expires: 1 hour
+    session_CHI:
+        use_plugin: 1
 
-	plugins:
-		Cache::CHI:
-			driver: Memory
-			global: 1
+    plugins:
+        Cache::CHI:
+            driver: Memory
+            global: 1
 
 =head1 DESCRIPTION
 
@@ -78,11 +78,12 @@ Writes all session data to the CHI storage backend.
 
 =item C<destroy()>
 
-Ends a Dancer session and wipes all session data from the CHI storage backend.
+Ends a Dancer session and wipes the session's data from the CHI storage backend.
 
-=item C<reset()>
+=item C<purge()>
 
-Clear all Dancer session data from the CHI backend.
+Direct access to CHI's C<purge()> method, clearing the data of all expired
+sessions from the CHI storage backend.
 
 =back
 
@@ -97,7 +98,9 @@ plugin configuration may instead be needed to be done in application code.
 
 =item *
 
-When using L<CHI::Driver::DBI>, thread/fork safety can be ensured by passing it a L<DBIx::Connector> object.
+When using L<CHI::Driver::DBI>, thread/fork safety can be ensured by passing it
+a L<DBIx::Connector> object or database handle returned by
+L<Dancer::Plugin::Database>'s C<database()> subroutine.
 
 =back
 
@@ -110,9 +113,8 @@ L<GitHub issues page|https://github.com/rsimoes/Dancer-Session-CHI/issues>.
 
 Richard Simões <rsimoes at CPAN dot org>
 
-=head1 COPYRIGHT AND LICENSE
+=head1 COPYRIGHT & LICENSE
 
-Copyright © 2011 Richard Simões. This module is released under the terms of the
-L<Artistic License 2.0|http://www.perlfoundation.org/artistic_license_2_0>
-and may be modified and/or redistributed under the same or any compatible license.
-
+Copyright © 2013 Richard Simões. This module is released under the terms of the
+B<MIT License> and may be modified and/or redistributed under the same or any
+compatible license.

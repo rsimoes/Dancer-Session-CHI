@@ -15,9 +15,11 @@ Dancer::set( session_CHI => { use_plugin => 1 } );
 my $session_id = session("id");
 
 lives_ok { Dancer::Session::CHI->retrieve($session_id) }
-	"session retrieval lives okay";
-is_deeply( session(), { id => $session_id },
-	"initial session data is as expected" );
+  "session retrieval lives okay";
+is_deeply(
+    session(), { id => $session_id },
+    "initial session data is as expected"
+);
 lives_ok { session( foo => "bar") } "setting session data lives okay";
 lives_ok { session->flush } "explicit session flushing lives okay";
 is session("foo"), "bar", "new session data is as expected";

@@ -9,17 +9,17 @@ use Dancer::Session::CHI;
 use Dancer::Plugin::Cache::CHI;
 
 throws_ok(
-	sub { Dancer::Session::CHI->create },
-	qr/CHI session options not found/,
-	"CHI session without any options throws expection"
+    sub { Dancer::Session::CHI->create },
+    qr/CHI session options not found/,
+    "CHI session without any options throws expection"
 );
 
 Dancer::set( session_CHI => { driver => "Memory", datastore => \ my %hash } );
 my $class = "Dancer::Session::CHI";
 my $session;
 lives_ok(
-	sub { $session = $class->create },
-	"CHI session without plugin created"
+    sub { $session = $class->create },
+    "CHI session without plugin created"
 );
 can_ok $session, qw/init create retrieve flush destroy id/;
 isa_ok $session, $class, "&create without plugin yields session engine that";
