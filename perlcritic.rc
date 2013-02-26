@@ -1,5 +1,5 @@
 severity = 3
 verbose  = 9
 theme    = core
-exclude  = ValuesAndExpressions::ProhibitVersionStrings  Subroutines::ProhibitBuiltinHomonyms
+exclude  = ValuesAndExpressions::ProhibitVersionStrings  Subroutines::ProhibitBuiltinHomonyms Subroutines::ProhibitUnusedPrivateSubroutines
 include  = Variables::ProhibitPackageVars

@@ -87,7 +87,7 @@ sub destroy {
     my ($self) = @_;
     my $session_id = $self->id;
     _chi->remove("session_$session_id");
-    cookie setting("session_name") => undef;
+    cookies->{setting("session_name")}->expires(0);
     Dancer::Logger->debug("Session (id: $session_id) destroyed.");
     return $self;
 }
