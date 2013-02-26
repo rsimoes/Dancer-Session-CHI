@@ -19,9 +19,9 @@ use base "Dancer::Session::Abstract";
 # Class methods:
 
 my $chi;
-sub init {
-    my ($self) = @_;
-    $self->SUPER::init(@_);
+sub _chi {
+
+    return $chi if blessed($chi);
 
     my $options = setting("session_CHI");
     if ( ref($options) ne "HASH" ) {
@@ -47,13 +47,14 @@ sub init {
             }
             Dancer::Plugin::Cache::CHI::cache()
         }
-        : CHI->new( %{$options} );
-    return;
+        : CHI->new( %{$options}
+    );
+    return $chi;
 }
 
 sub create {
     my ($class) = @_;
-    my $self = __PACKAGE__->new;
+    my $self = $class->new;
 
     $self->flush;
     Dancer::Logger->debug("Session (id: " . $self->id . " created.");
@@ -62,7 +63,7 @@ sub create {
 
 sub retrieve {
     my (undef, $session_id) = @_;
-    return $chi->get("session_$session_id")
+    return _chi->get("session_$session_id");
 }
 
 # Object methods:
@@ -70,13 +71,13 @@ sub retrieve {
 sub flush {
     my ($self) = @_;
     my $session_id = $self->id;
-    $chi->set( "session_$session_id" => $self );
+    _chi->set( "session_$session_id" => $self );
     return $self;
 }
 
 sub purge {
     my ($class) = @_;
-    $chi->purge;
+    _chi->purge;
     return;
 }
 
@@ -85,7 +86,7 @@ sub reset :method { goto &purge }
 sub destroy {
     my ($self) = @_;
     my $session_id = $self->id;
-    $chi->remove("session_$session_id");
+    _chi->remove("session_$session_id");
     cookie setting("session_name") => undef;
     Dancer::Logger->debug("Session (id: $session_id) destroyed.");
     return $self;
