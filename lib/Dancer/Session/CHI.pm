@@ -6,8 +6,8 @@ use utf8;
 use CHI;
 use Dancer ":syntax";
 use Dancer::Logger;
-use Dancer::Config qw(setting);
 use Dancer::ModuleLoader;
+use Dancer::Exception qw(raise);
 use File::Spec::Functions qw(rel2abs);
 use Scalar::Util qw(blessed);
 
@@ -69,7 +69,7 @@ sub _build_chi {
 
     my $options = setting("session_CHI");
     if ( ref($options) ne "HASH" ) {
-        error "CHI session options not found";
+        raise core_session => "CHI session options not found";
     }
 
     # Don't let CHI determine the absolute path:
@@ -80,15 +80,14 @@ sub _build_chi {
     my $use_plugin = delete $options->{use_plugin};
     my $is_loaded = exists setting("plugins")->{"Cache::CHI"};
     if ( $use_plugin && !$is_loaded ) {
-        error "CHI plugin requested but not loaded";
+        raise core_session => "CHI plugin requested but not loaded";
     }
 
     $chi = $use_plugin
         ? do {
             my $plugin = "Dancer::Plugin::Cache::CHI";
-            my $error_msg = "$plugin is needed and is not installed";
             unless ( Dancer::ModuleLoader->load($plugin) ) {
-                raise( core_session => $error_msg );
+                raise core_session => "$plugin is needed and is not installed";
             }
             Dancer::Plugin::Cache::CHI::cache()
         }

@@ -2,7 +2,7 @@ Revision history for Dancer-Session-CHI
 
 {{$NEXT}}
     - Fixed Dancer import.
-    - Switched to using &Dancer::error instead of &Carp::croak.
+    - Switched to using &Dancer::Exception::raise instead of &Carp::croak.
     - Promoted to full release.
 
 v0.1.5    2013-02-26 14:38:13 America/Chicago
