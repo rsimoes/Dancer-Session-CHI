@@ -12,9 +12,9 @@ use Dancer::Plugin::Cache::CHI;
 my $plugins = { "Cache::CHI" => { driver => "Memory", global => 1 } };
 Dancer::set( plugins => $plugins );
 Dancer::set( session_CHI => { use_plugin => 1 } );
-my $session_id = session("id");
 
-lives_ok { Dancer::Session::CHI->retrieve($session_id) }
+my $session_id;
+lives_ok { $session_id = session("id") }
   "session retrieval lives okay";
 is_deeply(
     session(), { id => $session_id },
