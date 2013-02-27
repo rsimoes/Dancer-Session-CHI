@@ -52,16 +52,13 @@ sub _chi {
 }
 
 sub create {
-    my ($class) = @_;
-    my $self = $class->new;
-
-    $self->flush;
+    my $self = __PACKAGE__->new->flush;
     Dancer::Logger->debug("Session (id: " . $self->id . " created.");
     return $self;
 }
 
 sub retrieve {
-    my (undef, $session_id) = @_;
+    my $session_id = $_[1];
     return _chi->get("session_$session_id");
 }
 
