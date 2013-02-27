@@ -58,7 +58,7 @@ sub create {
 }
 
 sub retrieve {
-    my $session_id = $_[1];
+    my (undef, $session_id) = @_;
     return _chi->get("session_$session_id");
 }
 
