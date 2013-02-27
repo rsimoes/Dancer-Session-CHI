@@ -59,7 +59,8 @@ sub create {
 
 sub retrieve {
     my (undef, $session_id) = @_;
-    return _chi->get("session_$session_id");
+    my $key = "session_$session_id";
+    return _chi->get($key);
 }
 
 # Object methods:
@@ -68,6 +69,7 @@ sub flush {
     my ($self) = @_;
     my $session_id = $self->id;
     _chi->set( "session_$session_id" => $self );
+    Dancer::debug("Session (id: $session_id) stored.");
     return $self;
 }
 
