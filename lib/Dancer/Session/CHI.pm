@@ -47,8 +47,7 @@ sub _chi {
             }
             Dancer::Plugin::Cache::CHI::cache()
         }
-        : CHI->new( %{$options}
-    );
+        : CHI->new(%$options);
     return $chi;
 }
 
