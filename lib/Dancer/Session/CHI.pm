@@ -72,12 +72,11 @@ sub flush {
 }
 
 sub purge {
-    my ($class) = @_;
     _chi->purge;
     return;
 }
 
-sub reset :method { goto &purge }
+#sub reset :method { goto &purge }
 
 sub destroy {
     my ($self) = @_;
