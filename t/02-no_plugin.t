@@ -13,7 +13,7 @@ throws_ok(
     qr/CHI session options not found/,
     "CHI session without any options throws expection"
 );
-
+Dancer::set( session => "CHI" );
 Dancer::set( session_CHI => { driver => "Memory", datastore => \ my %hash } );
 my $class = "Dancer::Session::CHI";
 my $session;

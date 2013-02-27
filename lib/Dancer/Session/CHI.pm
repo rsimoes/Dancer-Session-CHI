@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use utf8;
 use CHI;
-use Dancer ":syntax";
+use Dancer ();
 use Dancer::Logger;
 use Dancer::ModuleLoader;
 use Dancer::Exception qw(raise);
@@ -23,7 +23,7 @@ sub _chi {
 
     return $chi if blessed($chi);
 
-    my $options = setting("session_CHI");
+    my $options = Dancer::setting("session_CHI");
     if ( ref($options) ne "HASH" ) {
         raise core_session => "CHI session options not found";
     }
@@ -33,8 +33,8 @@ sub _chi {
         $options->{root_dir} = rel2abs($options->{root_dir});
     }
 
-    my $use_plugin = delete $options->{use_plugin};
-    my $is_loaded = exists setting("plugins")->{"Cache::CHI"};
+    my $use_plugin = $options->{use_plugin};
+    my $is_loaded = exists Dancer::setting("plugins")->{"Cache::CHI"};
     if ( $use_plugin && !$is_loaded ) {
         raise core_session => "CHI plugin requested but not loaded";
     }
@@ -82,7 +82,7 @@ sub destroy {
     my ($self) = @_;
     my $session_id = $self->id;
     _chi->remove("session_$session_id");
-    cookies->{setting("session_name")}->expires(0);
+    Dancer::cookies->{Dancer::setting("session_name")}->expires(0);
     Dancer::Logger->debug("Session (id: $session_id) destroyed.");
     return $self;
 }
